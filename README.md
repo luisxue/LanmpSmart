@@ -1,8 +1,6 @@
 ## TreesShell 定制化、自动化 部署 WEB项目生产环境。
 ### TreesShell 会极大方便项目生产环境的快速交付
-\n
-\n
-\n
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 **优点**
 
 * 定制化  可定制化编译安装项目运行的生产环境。
@@ -16,13 +14,8 @@
 
 Centos7稳定版平台（稳定性测试中...）
 =================================
-\n
-\n
-\n
-\n
-\n
-\n
-\n
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Centos7稳定版平台（Centos6.5系统）
 =================================
 **生产环境服务**：
@@ -41,11 +34,17 @@ Centos7稳定版平台（Centos6.5系统）
 ### 服务安装
 
 ### 安装Nginx
-
+Centos6.5下 安装Nginx
+---------------------------
 
 ### 安装Apache
+Centos6.5下 安装Nginx
+---------------------------
 
 ### 安装Redis redis-3.2.5
+
+Centos6.5下 安装redis-3.2.5
+---------------------------
 #### 一、环境准备
 1、安装 gcc gcc-c++ tcl
 ```
@@ -402,8 +401,135 @@ cd /usr/local/rabbitmq/sbin
 
 ### 安装shpinx  sphinx-2.2.11
 
+Centos6.5 安装 sphinx-2.2.11
+-----------------------------
 
+#### 1.下载
+```
+cd /usr/software
+wget http://sphinxsearch.com/files/sphinx-2.2.11-release.tar.gz
+```
+或者直接去Sphinx官网去下载最新版本
+#### 2、安装依赖包
+```
+yum -y install make gcc g++ gcc-c++ libtool autoconf automake imake mysql-devel libxml2-devel expat-devel
+```
+#### 3、安装Sphinx 
+```
+tar zxvf sphinx-2.2.11-release.tar.gz
 
+cd sphinx-2.2.11-release
+```
+检测一下当前的环境是否满足安装Sphinx的要求且指定安装路径。命令如下：
+```
+./configure --prefix=/usr/local/sphinx
+```
+**编译安装**
+make
+如果make失败了，可以用make clean 清除下再重新make 一下
+make install
+```
+vi /etc/ld.so.conf 
+
+/usr/local/mysql/lib #增加这一行保存 
+
+/sbin/ldconfig -v
+```
+#### 4、配置Sphinx
+```
+cd /usr/local/sphinx/etc
+cp sphinx-min.conf.dist csft.conf
+vi csft.conf
+
+source mysql
+{
+ type       = mysql
+ sql_host     = 10.10.3.203
+ sql_user     = root
+ sql_pass     = dsideal
+ sql_db      = test
+ sql_port     = 3306
+ sql_sock     = /usr/local/mysql/mysql.sock
+ sql_query_pre   = SET NAMES utf8
+ sql_query     = SELECT id, group_id, UNIX_TIMESTAMP(date_added) AS date_added, title, content FROM documents
+ sql_attr_uint   = group_id
+ #sql_attr_timestamp= date_added
+ #sql_query_info_pre= SET NAMES utf8
+ #sql_query_info  = SELECT * FROM aaa WHERE id=$id
+}
+index index_mysql
+{
+ source    = mysql
+ path     = /usr/local/sphinx/var/data
+ docinfo    = extern
+ mlock     = 0
+ min_word_len = 1
+ charset_type = utf-8
+ charset_table = U+FF10..U+FF19->0..9, 0..9, U+FF41..U+FF5A->a..z, U+FF21..U+FF3A->a..z,A..Z->a..z, a..z, U+0149, U+017F, U+0138, U+00DF, U+00FF, U+00C0..U+00D6->U+00E0..U+00F6,U+00E0..U+00F6, U+00D8..U+00DE->U+00F8..U+00FE, U+00F8..U+00FE, U+0100->U+0101, U+0101,U+0102->U+0103, U+0103, U+0104->U+0105, U+0105, U+0106->U+0107, U+0107, U+0108->U+0109,U+0109, U+010A->U+010B, U+010B, U+010C->U+010D, U+010D, U+010E->U+010F, U+010F,U+0110->U+0111, U+0111, U+0112->U+0113, U+0113, U+0114->U+0115, U+0115, U+0116->U+0117,U+0117, U+0118->U+0119, U+0119, U+011A->U+011B, U+011B, U+011C->U+011D,U+011D,U+011E->U+011F, U+011F, U+0130->U+0131, U+0131, U+0132->U+0133, U+0133, U+0134->U+0135,U+0135, U+0136->U+0137, U+0137, U+0139->U+013A, U+013A, U+013B->U+013C, U+013C,U+013D->U+013E, U+013E, U+013F->U+0140, U+0140, U+0141->U+0142, U+0142, U+0143->U+0144,U+0144, U+0145->U+0146, U+0146, U+0147->U+0148, U+0148, U+014A->U+014B, U+014B,U+014C->U+014D, U+014D, U+014E->U+014F, U+014F, U+0150->U+0151, U+0151, U+0152->U+0153,U+0153, U+0154->U+0155, U+0155, U+0156->U+0157, U+0157, U+0158->U+0159,U+0159,U+015A->U+015B, U+015B, U+015C->U+015D, U+015D, U+015E->U+015F, U+015F, U+0160->U+0161,U+0161, U+0162->U+0163, U+0163, U+0164->U+0165, U+0165, U+0166->U+0167, U+0167,U+0168->U+0169, U+0169, U+016A->U+016B, U+016B, U+016C->U+016D, U+016D, U+016E->U+016F,U+016F, U+0170->U+0171, U+0171, U+0172->U+0173, U+0173, U+0174->U+0175,U+0175,U+0176->U+0177, U+0177, U+0178->U+00FF, U+00FF, U+0179->U+017A, U+017A, U+017B->U+017C,U+017C, U+017D->U+017E, U+017E, U+0410..U+042F->U+0430..U+044F, U+0430..U+044F,U+05D0..U+05EA, U+0531..U+0556->U+0561..U+0586, U+0561..U+0587, U+0621..U+063A, U+01B9,U+01BF, U+0640..U+064A, U+0660..U+0669, U+066E, U+066F, U+0671..U+06D3, U+06F0..U+06FF,U+0904..U+0939, U+0958..U+095F, U+0960..U+0963, U+0966..U+096F, U+097B..U+097F,U+0985..U+09B9, U+09CE, U+09DC..U+09E3, U+09E6..U+09EF, U+0A05..U+0A39, U+0A59..U+0A5E,U+0A66..U+0A6F, U+0A85..U+0AB9, U+0AE0..U+0AE3, U+0AE6..U+0AEF, U+0B05..U+0B39,U+0B5C..U+0B61, U+0B66..U+0B6F, U+0B71, U+0B85..U+0BB9, U+0BE6..U+0BF2, U+0C05..U+0C39,U+0C66..U+0C6F, U+0C85..U+0CB9, U+0CDE..U+0CE3, U+0CE6..U+0CEF, U+0D05..U+0D39, U+0D60,U+0D61, U+0D66..U+0D6F, U+0D85..U+0DC6, U+1900..U+1938, U+1946..U+194F, U+A800..U+A805,U+A807..U+A822, U+0386->U+03B1, U+03AC->U+03B1, U+0388->U+03B5, U+03AD->U+03B5,U+0389->U+03B7, U+03AE->U+03B7, U+038A->U+03B9, U+0390->U+03B9, U+03AA->U+03B9,U+03AF->U+03B9, U+03CA->U+03B9, U+038C->U+03BF, U+03CC->U+03BF, U+038E->U+03C5,U+03AB->U+03C5, U+03B0->U+03C5, U+03CB->U+03C5, U+03CD->U+03C5, U+038F->U+03C9,U+03CE->U+03C9, U+03C2->U+03C3, U+0391..U+03A1->U+03B1..U+03C1,U+03A3..U+03A9->U+03C3..U+03C9, U+03B1..U+03C1, U+03C3..U+03C9, U+0E01..U+0E2E,U+0E30..U+0E3A, U+0E40..U+0E45, U+0E47, U+0E50..U+0E59, U+A000..U+A48F, U+4E00..U+9FBF,U+3400..U+4DBF, U+20000..U+2A6DF, U+F900..U+FAFF, U+2F800..U+2FA1F, U+2E80..U+2EFF,U+2F00..U+2FDF, U+3100..U+312F, U+31A0..U+31BF, U+3040..U+309F, U+30A0..U+30FF,U+31F0..U+31FF, U+AC00..U+D7AF, U+1100..U+11FF, U+3130..U+318F, U+A000..U+A48F,U+A490..U+A4CF
+ min_prefix_len = 0
+ min_infix_len = 1
+ ngram_len   = 1
+
+}
+indexer
+{
+ mem_limit  = 256M
+}
+searchd
+{
+ listen      = 3312
+ listen      = 3313:mysql41
+ log        = /usr/local/sphinx/var/log/searchd.log
+ query_log     = /usr/local/sphinx/var/log/query.log
+ read_timeout   = 5
+ client_timeout  = 300
+ max_children   = 30
+ pid_file     = /usr/local/sphinx/var/log/searchd.pid
+ max_matches    = 1000
+ seamless_rotate  = 1
+ preopen_indexes  = 1
+ unlink_old    = 1
+}
+
+**备注： 当前复制原有环境，批量修改配置是最快的方法**
+
+#### 5、启动Sphinx、创建索引
+
+**启动**
+```
+/usr/local/sphinx/bin/searchd -c /usr/local/sphinx/etc/csft.conf
+```
+**创建索引**
+```
+/usr/local/sphinx/bin/indexer -c /usr/local/sphinx/etc/csft.conf --rotate --all
+```
+**停止**
+```
+/usr/local/sphinx/bin/searchd -c /usr/local/sphinx/etc/csft.conf --stop
+```
+
+```
+CREATE TABLE `documents_sphinxse` (
+ `id` bigint(20) unsigned NOT NULL,
+ `weight` int(11) DEFAULT '1',
+ `query` varchar(3072) NOT NULL,
+ `author_id` int(10) unsigned DEFAULT '0',
+ `group_id` int(10) unsigned DEFAULT '0',
+ KEY `query` (`query`(1024))
+) ENGINE=SPHINX DEFAULT CHARSET=utf8 CONNECTION='sphinx://10.10.3.203:3312';
+```
+```
+Select id from   documents_sphinxse where query="增加用户"; 
+```
+```
+#/usr/local/sphinx/bin/searchd -c /etc/sphinx/sphinx_pro.conf
+#/usr/local/sphinx/bin/indexer --config /etc/sphinx/sphinx_pro.conf --all --rotate
+```
+
+> 备注： 在centos系统的定时服务中，写入crontab：/etc/crontab，每分钟执行sphinx同步一次
+```
+*/1 * * * * /usr/local/sphinx/bin/indexer --config /etc/sphinx/sphinx_pro.conf --all --rotate
+```
 [Docker for Mac 下载](https://dn-dao-github-mirror.qbox.me/docker/install/mac/Docker.dmg)
 在Mac上运行Docker。系统要求，OS X 10.10.3 
 
