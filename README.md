@@ -72,13 +72,13 @@ yum -y install openssl*
 #### 2.下载nginx-1.10.0.tar.gz，可放在 /home/local/ 目录下
 ```
 cd /usr/local/  
-wget http://nginx.org/download/nginx-1.9.9.tar.gz 
+wget http://nginx.org/download/nginx-1.10.0.tar.gz 
 ```
 
 #### 3.解压及编译安装
 ```
-tar -zxvf nginx-1.9.9.tar.gz 
-cd nginx-1.9.9 
+tar -zxvf nginx-1.10.0.tar.gz 
+cd nginx-1.10.0
 ./configure --prefix=/usr/local/nginx 
 make  &&  make  install
 ```
