@@ -295,17 +295,17 @@ cd ./rabbitmq-3.6.3/sbin/
 ./rabbitmq-server
 ```
 **在后台启动Rabbit**
-``
+```
 ./rabbitmq-server -detached
 ```
 **关闭服务**
-``
+```
 ./rabbitmqctl stop
-``
+```
 **关闭服务(kill) 找到rabbitmq服务的pid  [不推荐]**
 ```
 ps -ef|grep rabbitmq
-kill -9 ****
+kill -9 ~~~~
 ```
 ##### 4. 添加管理员账号
 
