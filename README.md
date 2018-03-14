@@ -14,9 +14,14 @@
 
 Centos7稳定版平台（稳定性测试中...）
 =================================
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Centos7稳定版平台（Centos6.5系统）
+
+
+*
+*
+*
+
+
+Centos6稳定版平台（Centos6.5系统）
 =================================
 **生产环境服务**：
 
@@ -29,9 +34,11 @@ Centos7稳定版平台（Centos6.5系统）
 * 7.shpinx：sphinx-2.2.11
 
 **架构部署** LNMPA一层反向代理三台负载架构
+*
+*
+*
 
-
-### 服务安装
+### WEB服务安装
 
 ### 安装Nginx
 Centos6.5下 安装nginx/1.10.0
@@ -202,6 +209,8 @@ service nginx start
 service nginx stop
 service nginx reload
 ```
+
+> nginx vhosts配置 新建mkdir /usr/local/nginx/conf/vhosts目录后，编辑vi /usr/local/nginx/conf/nginx.conf 加入include vhosts/* 自我定制配置vhosts下test.conf等配置文件
 
 ### 安装Apache
 Centos6.5下 安装Apache/2.4.20 
