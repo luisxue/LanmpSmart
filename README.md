@@ -34,12 +34,184 @@ Centos7稳定版平台（Centos6.5系统）
 ### 服务安装
 
 ### 安装Nginx
-Centos6.5下 安装Nginx
+Centos6.5下 安装nginx/1.10.0
 ---------------------------
+#### 1.安装环境
+nginx的编译需要c++，同时prce（重定向支持）和openssl（https支持）也需要安装。
+顺序安装依赖
+```
+yum install gcc-c++  
+yum -y install pcre*  
+yum -y install openssl* 
+
+```
+#### 2.下载nginx-1.10.0.tar.gz，可放在 /home/local/ 目录下
+```
+cd /usr/local/  
+wget http://nginx.org/download/nginx-1.9.9.tar.gz 
+```
+
+#### 3.解压及编译安装
+```
+tar -zxvf nginx-1.9.9.tar.gz 
+cd nginx-1.9.9 
+./configure --prefix=/usr/local/nginx 
+make  &&  make  install
+```
+#### 4.启动nginx服务
+```
+cd /usr/local/nginx  
+./nginx
+./nginx  -t
+./nginx  -s reload
+```
+#### 5.查看进程
+```
+ps -ef | grep nginx
+./nginx -s reload
+```
+
+#### 6.添加、编写启动脚本 /etc/init.d/nginx
+```
+vim /etc/init.d/nginx
+```
+编写启动脚本
+```
+#!/bin/sh 
+# 
+# nginx - this script starts and stops the nginx daemon 
+# 
+# chkconfig:   - 85 15 
+# description: Nginx is an HTTP(S) server, HTTP(S) reverse \ 
+#               proxy and IMAP/POP3 proxy server 
+# processname: nginx 
+# config:      /etc/nginx/nginx.conf 
+# config:      /etc/sysconfig/nginx 
+# pidfile:     /var/run/nginx.pid 
+
+# Source function library. 
+. /etc/rc.d/init.d/functions 
+
+# Source networking configuration. 
+. /etc/sysconfig/network 
+
+# Check that networking is up. 
+[ "$NETWORKING" = "no" ] && exit 0 
+
+nginx="/usr/local/nginx/sbin/nginx" 
+prog=$(basename $nginx) 
+
+NGINX_CONF_FILE="/usr/local/nginx/conf/nginx.conf" 
+
+[ -f /etc/sysconfig/nginx ] && . /etc/sysconfig/nginx 
+
+lockfile=/var/lock/subsys/nginx 
+
+start() { 
+    [ -x $nginx ] || exit 5 
+    [ -f $NGINX_CONF_FILE ] || exit 6 
+    echo -n $"Starting $prog: " 
+    daemon $nginx -c $NGINX_CONF_FILE 
+    retval=$? 
+    echo 
+    [ $retval -eq 0 ] && touch $lockfile 
+    return $retval 
+} 
+
+stop() { 
+    echo -n $"Stopping $prog: " 
+    killproc $prog -QUIT 
+    retval=$? 
+    echo 
+    [ $retval -eq 0 ] && rm -f $lockfile 
+    return $retval 
+killall -9 nginx 
+} 
+
+restart() { 
+    configtest || return $? 
+    stop 
+    sleep 1 
+    start 
+} 
+
+reload() { 
+    configtest || return $? 
+    echo -n $"Reloading $prog: " 
+    killproc $nginx -HUP 
+RETVAL=$? 
+    echo 
+} 
+
+force_reload() { 
+    restart 
+} 
+
+configtest() { 
+$nginx -t -c $NGINX_CONF_FILE 
+} 
+
+rh_status() { 
+    status $prog 
+} 
+
+rh_status_q() { 
+    rh_status >/dev/null 2>&1 
+} 
+
+case "$1" in 
+    start) 
+        rh_status_q && exit 0 
+    $1 
+        ;; 
+    stop) 
+        rh_status_q || exit 0 
+        $1 
+        ;; 
+    restart|configtest) 
+        $1 
+        ;; 
+    reload) 
+        rh_status_q || exit 7 
+        $1 
+        ;; 
+    force-reload) 
+        force_reload 
+        ;; 
+    status) 
+        rh_status 
+        ;; 
+    condrestart|try-restart) 
+        rh_status_q || exit 0 
+            ;; 
+    *)    
+      echo $"Usage: $0 {start|stop|status|restart|condrestart|try-restart|reload|force-reload|configtest}" 
+        exit 2 
+
+esac
+```
+
+执行启动脚本 /etc/init.d/nginx
+```
+chmod 755 /etc/init.d/nginx
+chkconfig --add nginx
+```
+#### nginx启动、停止、平滑重启
+```
+service nginx start
+service nginx stop
+service nginx reload
+```
 
 ### 安装Apache
-Centos6.5下 安装Nginx
+Centos6.5下 安装Apache/2.4.20 
 ---------------------------
+
+
+
+
+
+
 
 ### 安装Redis redis-3.2.5
 
