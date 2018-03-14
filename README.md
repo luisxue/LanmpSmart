@@ -436,11 +436,13 @@ vi /etc/ld.so.conf 
 /sbin/ldconfig -v
 ```
 #### 4、配置Sphinx
+
 ```
 cd /usr/local/sphinx/etc
 cp sphinx-min.conf.dist csft.conf
 vi csft.conf
-
+```
+```
 source mysql
 {
  type       = mysql
@@ -490,7 +492,7 @@ searchd
  preopen_indexes  = 1
  unlink_old    = 1
 }
-
+```
 **备注： 当前复制原有环境，批量修改配置是最快的方法**
 
 #### 5、启动Sphinx、创建索引
