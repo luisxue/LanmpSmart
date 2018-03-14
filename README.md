@@ -213,75 +213,82 @@ service nginx reload
 > nginx vhosts配置 新建mkdir /usr/local/nginx/conf/vhosts目录后，编辑vi /usr/local/nginx/conf/nginx.conf 加入include vhosts/* 自我定制配置vhosts下test.conf等配置文件
 
 ### 安装Apache
-Centos6.5下 安装Apache/2.4.20 
+Centos6.5下 安装Apache/2.4.20
 ---------------------------
 
 #### 卸载原有的apache
-
+```
 rpm -qa |grep httpd
 httpd-tools-2.2.15-53.el6.centos.x86_64
 httpd-2.2.15-53.el6.centos.x86_64
-
+```
 #### 卸载卸载原有Apache
-
+```
 rpm -e --nodeps httpd-tools-2.2.15-53.el6.centos.x86_64
 rpm -e --nodeps httpd-2.2.15-53.el6.centos.x86_64
 rpm -qa |grep httpd
-
+```
 
 #### 安装所依赖的环境和软件包
-
+```
 yum -y install gcc
 yum -y install make
 yum -y install gcc-c++
 yum groupinstall -y "Server Platform Development"
 yum groupinstall -y "Development tools"
 yum install -y pcre-devel-7.8-6.el6.x86_64
-
+```
 
 #### 下载和安装
 ##### 先装gcc和make
+```
 yum -y install gcc
 yum -y install make
 yum -y install gcc-c++ 没有这个gcc-c++一会编译不prce
+```
 切到下载好的源码包目录,本人是~/Download
 
 
 ##### 安装apr:
+```
 tar -zvxf apr-1.4.6.tar.gz
 cd apr-1.4.6
 ./configure --prefix=/usr/local/apr
 make && make install
-
+```
 
 ##### 安装apr-util
+```
 tar -zvxf apr-util-1.5.1.tar.gz
 cd apr-util-1.5.1
 ./configure --prefix=/usr/local/apr-util --with-apr=/usr/local/apr
 make && make install
-
+```
 
 ##### 安装pcre
+```
 tar -zvxf pcre-8.32.tar.gz
 cd pcre-8.32
 ./configure
 make && make install
-
+```
 
 ##### 安装pcre-devel
 如果已经安装好了pcre 一定要安装
+```
 tar –zxvf pcre-devel-8.32.tar.gz
 cd pcre-devel-8.32
 ./configure
 make && make install
-
+```
 
 ##### 安装apache 一定要先装上面那三个不然编译不了
-tar -zvxf httpd-2.4.4.tar.gz
-cd httpd-2.4.4
+```
+tar -zvxf httpd-2.4.20.tar.gz
+cd httpd-2.4.20
 ./configure --prefix=/usr/local/apache –with-apr=/usr/local/apr --with-apr-util=/usr/local/apr-util
 make && make install
-
+```
 
 配置/usr/local/apache/conf下的http.conf文件(先备份)。
 
@@ -504,6 +511,9 @@ COMMIT
 ```
 /usr/local/bin/redis-server /etc/redis.conf > /dev/null &
 ```
+
+> Redis远程连接问题： 服务器本地配置好redis后确保Redis-cli可以使用，远程连接一般有问题为三层：第一层是阿里云或其他访问白名单要有或者默认不设置。第二层是Centos的iptables问题，必须确保端口6379或其他端口可用。第三层是Redis配置文件问题，修改redis.conf配置文件bind 127.0.0.1  为  0.0.0.0。然后保存后重启Redis服务。
+
 
 ### 安装Rabbitmq rabbitmq-3.6.3
 
