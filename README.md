@@ -12,7 +12,7 @@
 
 备注：生产环境平台系统和服务镜像，阿里云开源系统：https://opsx.alibaba.com/mirror
 
-Centos7稳定版平台（稳定性测试中...）
+Centos7稳定版平台（持续稳定性测试中...）
 =================================
 
 
@@ -21,16 +21,22 @@ Centos7稳定版平台（稳定性测试中...）
 *
 
 
-Centos6稳定版平台（Centos6.5系统）
+Centos6稳定版平台（Centos6.5系统） 第一次更新（持续更新中...）
 =================================
-**生产环境服务**：
+**测试环境服务**：
 
 * 1.nginx ：nginx/1.10.0
+
 * 2.apache：Apache/2.4.20 (Unix)
+
 * 3.php：PHP 5.6.22 (cli)
+
 * 4.mysql：mysql  Distrib 5.7.11
+
 * 5.redis：redis-3.2.5
+
 * 6.rabbitmq：rabbitmq-3.6.3
+
 * 7.shpinx：sphinx-2.2.11
 
 **架构部署** LNMPA一层反向代理三台负载架构
@@ -523,6 +529,7 @@ Centos6.5 安装 RabbitMQ3.6.3
 ```
 yum -y install make gcc gcc-c++ kernel-devel m4 ncurses-devel openssl-devel
 ```
+
 **yum安装python**
 
 #### 安装Erlang
@@ -533,38 +540,42 @@ wget http://erlang.org/download/otp_src_18.3.tar.gz
 ```
 
 ##### 2.安装
+
 **解压**
 ```
 tar xvf otp_src_18.3.tar.gz
 cd otp_src_18.3
 ```
+
 **配置 '--prefix'指定的安装目录**
 ```
 ./configure --prefix=/usr/local/erlang --with-ssl -enable-threads -enable-smmp-support -enable-kernel-poll --enable-hipe --without-javac
 ```
+
 **安装**
-``
+```
 make && make install
 ```
+
 #### 3.配置erlang环境变量
 ```
 vim /etc/profile
-``
+```
 **在文件末尾添加下面代码 'ERLANG_HOME'等于上一步'--prefix'指定的目录**
-``
+```
 ERLANG_HOME=/usr/local/erlang
 PATH=$ERLANG_HOME/bin:$PATH
 export ERLANG_HOME
 export PATH
-``
+```
 **使环境变量生效** 
-``
+```
 source /etc/profile
-``
+```
 **输入命令检验是否安装成功** 
-``
+```
 erl
-``
+```
 
 
 #### 安装RabbitMQ
@@ -842,39 +853,12 @@ Select id from   documents_sphinxse where query="增加用户"; 
 ```
 */1 * * * * /usr/local/sphinx/bin/indexer --config /etc/sphinx/sphinx_pro.conf --all --rotate
 ```
-[Docker for Mac 下载](https://dn-dao-github-mirror.qbox.me/docker/install/mac/Docker.dmg)
-在Mac上运行Docker。系统要求，OS X 10.10.3 
-
-**windows 7 下安装**
-
-[Docker for Windows 下载](https://dn-dao-github-mirror.qbox.me/docker/install/windows/InstallDocker.msi)
-在Windows上运行Docker
 
 
-yum 安装
-
+注：安装步骤和脚本因Linux软件升级的因素，没3个月需检查一次可用性
 ```
-sudo yum update
-sudo yum install docker
-#安装程序将docker程序安装到/usr/bin⺫⽬目录下，配置⽂文件安装在/etc/sysconfig/docker。安装好docker之后，可以 将docker加⼊入到启动服务组中 
-sudo systemctl enable docker.service
-#手动启动docker服务器，使⽤用命令 sudo systemctl start docker.service
-```
-
-
-### 常用命令
-* docker start 容器名（容器ID也可以）
-* docker stop 容器名（容器ID也可以）
-* docker run 命令加 -d 参数，docker 会将容器放到后台运行
-* docker ps 正在运行的容器
-
-### docker 三剑客之Docker Compose
-
-注：需要安装
-```
-yum -y install epel-release
-yum -y install python-pip
-pip install -U docker-compose
+*
+*
 
 ```
 
