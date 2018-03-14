@@ -216,10 +216,129 @@ service nginx reload
 Centos6.5下 安装Apache/2.4.20 
 ---------------------------
 
+#### 卸载原有的apache
+
+rpm -qa |grep httpd
+httpd-tools-2.2.15-53.el6.centos.x86_64
+httpd-2.2.15-53.el6.centos.x86_64
+
+#### 卸载卸载原有Apache
+
+rpm -e --nodeps httpd-tools-2.2.15-53.el6.centos.x86_64
+rpm -e --nodeps httpd-2.2.15-53.el6.centos.x86_64
+rpm -qa |grep httpd
 
 
+#### 安装所依赖的环境和软件包
+
+yum -y install gcc
+yum -y install make
+yum -y install gcc-c++
+yum groupinstall -y "Server Platform Development"
+yum groupinstall -y "Development tools"
+yum install -y pcre-devel-7.8-6.el6.x86_64
 
 
+#### 下载和安装
+##### 先装gcc和make
+yum -y install gcc
+yum -y install make
+yum -y install gcc-c++ 没有这个gcc-c++一会编译不prce
+切到下载好的源码包目录,本人是~/Download
+
+
+##### 安装apr:
+tar -zvxf apr-1.4.6.tar.gz
+cd apr-1.4.6
+./configure --prefix=/usr/local/apr
+make && make install
+
+
+##### 安装apr-util
+tar -zvxf apr-util-1.5.1.tar.gz
+cd apr-util-1.5.1
+./configure --prefix=/usr/local/apr-util --with-apr=/usr/local/apr
+make && make install
+
+
+##### 安装pcre
+tar -zvxf pcre-8.32.tar.gz
+cd pcre-8.32
+./configure
+make && make install
+
+
+##### 安装pcre-devel
+如果已经安装好了pcre 一定要安装
+tar –zxvf pcre-devel-8.32.tar.gz
+cd pcre-devel-8.32
+./configure
+make && make install
+
+
+##### 安装apache 一定要先装上面那三个不然编译不了
+tar -zvxf httpd-2.4.4.tar.gz
+cd httpd-2.4.4
+./configure --prefix=/usr/local/apache –with-apr=/usr/local/apr --with-apr-util=/usr/local/apr-util
+make && make install
+
+
+配置/usr/local/apache/conf下的http.conf文件(先备份)。
+
+#### 启动Apache服务
+
+##### 1、服务器
+```
+#ServerName www.example.com:80 前的#号删除。
+```
+##### 2、目录访问权限
+```
+<Directory />
+Options FollowSymLinks
+AllowOverride None
+Order deny,allow
+Allow from all #修改为此样
+</Directory>
+```
+##### 3、默认字符集
+```
+AddDefaultCharset utf-8 #指定默认字符集
+```
+
+##### 4、启动httpd
+```
+cd bin/
+./apachectl start | restart | stop
+```
+
+将httpd添加为系统服务
+```
+cp apachectl /etc/init.d/httpd
+/etc/init.d/
+```
+编辑httpd，在第二行加入如下信息：
+```
+# chkconfig: 345 85 15
+# description: Activates/Deactivates Apache Web Server
+```
+以上两句必须添加，否则会提示“httpd服务不支持”；第一行3个数字参数意义分别为：哪些Linux级别需要启动httpd(3,4,5)；启动序号(85)；关闭序号(15)。
+
+
+添加启动信息(Ubuntu与CentOS有区别)
+```
+chkconfig –add httpd
+```
+查看是否添加成功
+```
+chkconfig --list
+```
+
+服务器控制
+```
+service httpd start | restart | stop
+```
+
+> apache vhosts配置 新建mkdir /usr/local/apache/conf/vhosts目录后，编辑vi /usr/local/apache/conf/httpd.conf 加入include vhosts/* 自我定制配置vhosts下test.conf等配置文件
 
 
 ### 安装Redis redis-3.2.5
