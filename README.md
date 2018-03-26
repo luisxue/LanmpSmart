@@ -12,7 +12,7 @@
 
 备注：生产环境平台系统和服务镜像，阿里云开源系统：https://opsx.alibaba.com/mirror
 
-###git分享的是shell脚本安装方法，说明文档为，定制编译安装步骤和方法
+> **Git分享的是shell脚本安装方法，说明文档为，定制编译安装步骤和方法**
 
 
 Centos7稳定版平台（持续稳定性测试中...）LNMPA + RRMVS 定制编译安装
@@ -869,7 +869,7 @@ Select id from   documents_sphinxse where query="增加用户"; 
 ```
 
 
-注：安装步骤和脚本因Linux软件升级的因素，每3个月需检查和更新一次
+注：安装步骤和脚本因Linux软件升级的因素，每3个月需检查和更新一次...
 ```
 *
 *
